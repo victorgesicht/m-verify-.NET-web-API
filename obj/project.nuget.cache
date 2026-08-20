@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "MEw0dmvCmRU=",
+  "success": true,
+  "projectFilePath": "/Users/7mf/Desktop/m-verify/m-verify/m-verify-BE.csproj",
+  "expectedPackageFiles": [
+    "/Users/7mf/.nuget/packages/microsoft.aspnetcore.openapi/10.0.11/microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
+    "/Users/7mf/.nuget/packages/microsoft.openapi/2.7.5/microsoft.openapi.2.7.5.nupkg.sha512"
+  ],
+  "logs": []
+}
