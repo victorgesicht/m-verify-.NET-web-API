@@ -6,15 +6,17 @@ namespace m_verify_BE.DTOs
         public string Type { get; set; } = "auto";
     }
 
-    public class VerifyResultDto
+    public class VerifyResponseDto
     {
         public bool Found { get; set; }
-        public string IdNumber { get; set; } = string.Empty;
-        public string FullName { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-        public string Remarks { get; set; } = string.Empty;
+        public string Query { get; set; } = string.Empty;
+        public string? IdNumber { get; set; }
+        public string? FullName { get; set; }
+        public string? Phone { get; set; }
+        public string? Email { get; set; }
+        public string? Status { get; set; }
+        public string? Remarks { get; set; }
         public DateTime? VerifiedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }

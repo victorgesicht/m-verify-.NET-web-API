@@ -3,7 +3,11 @@ obj/
 *.db
 *.db-shm
 *.db-wal
-mverify.db
 appsettings.Production.json
 appsettings.*.local.json
 .env
+.env.*
+!.env.example
+.vs/
+.vscode/
+*.user
