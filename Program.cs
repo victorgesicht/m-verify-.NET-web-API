@@ -1,38 +1,49 @@
+using m_verify_BE.Data;
+using m_verify_BE.Middleware;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
-// 1. Configure CORS (Allows requests from any origin)
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(myAllowSpecificOrigins,
-                          policy =>
-                          {
-                              policy.WithOrigins("https://m-verify.onrender.com"),
-                                                  
-                                                  .AllowAnyHeader()
-                                                  .AllowAnyMethod();
-                          });
+        policy =>
+        {
+            if (builder.Environment.IsDevelopment())
+            {
+                policy.WithOrigins("http://localhost:5173", "http://localhost:3000", "https://m-verify.onrender.com")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            }
+            else
+            {
+                policy.WithOrigins("https://m-verify.onrender.com")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            }
+        });
 });
-builder.Services.AddOpenApi("v1");
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite("Data Source=mverify.db"));
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.MapOpenApi();
-    app.MapScalar();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.EnsureCreated();
+    await DbInitializer.SeedAsync(db);
 }
 
+app.UseMiddleware<ApiKeyMiddleware>();
+app.UseCors(myAllowSpecificOrigins);
 app.UseHttpsRedirection();
-
-
-
+app.MapControllers();
+app.MapGet("/", () => Results.Ok(new { app = "m-verify-be", status = "running", endpoints = new[] { "/api/verify/health", "/api/verify/search", "/api/admin/records (requires X-API-KEY)", "/api/admin/auth/verify" } }));
 app.Run();
-
-// 4. Data Model
-public class UserModel
-{
-    public Guid Id { get; set; }
-    public string Number { get; set; } = string.Empty;
-    public string Email { get; set; } = string.Empty;
-    public string Miscellaneous { get; set; } = string.Empty;
-}
