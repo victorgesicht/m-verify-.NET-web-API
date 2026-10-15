@@ -29,11 +29,11 @@ if (string.IsNullOrWhiteSpace(jwtOptions.Key) || jwtOptions.Key.Length < 32)
 var corsPolicyName = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(corsPolicyName, policy =>
+    options.AddPolicy(corsPolicyName, policy =>//caught this slop
     {
         if (builder.Environment.IsDevelopment())
         {
-            policy.WithOrigins("http://localhost:5173", "http://localhost:3000", "https://m-verify.onrender.com")
+            policy.WithOrigins("http://localhost:5173", "http://localhost:3000", "https://m-verify.onrender.com")//depth
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         }
